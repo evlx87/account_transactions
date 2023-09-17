@@ -13,6 +13,7 @@ def read_from_json(path):
 
 
 def get_last_operations(operations):
+    """Сортирует список операций по дате и возвращает последние пять операций"""
     data = [operation for operation in operations if operation != {} and operation['state'] == 'EXECUTED']
     data.sort(key=lambda x: x['date'], reverse=True)
     return data[0:5]
@@ -23,7 +24,14 @@ def get_data_transactions(operations):
         date = datetime.fromisoformat(operation['date'])
         description = operation['description']
         amount = f"{float(operation['operationAmount']['amount']):.2f} {operation['operationAmount']['currency']['name']}"
-        masked_from = operation['from']
-        masked_to = operation['to']
+        if 'from' in operation:
+            masked_from = operation['from']
+        else:
+            masked_from = "Внесение средств"
+
+        if 'to' in operation:
+            masked_to = operation['to']
+        else:
+            masked_to = None
 
         print(f"""{date} {description}\n{masked_from} -> {masked_to}\n{amount}\n""")
