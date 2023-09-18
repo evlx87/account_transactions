@@ -42,17 +42,29 @@ def get_data_transactions(operations):
             currency = f"{operation['operationAmount']['currency']['name']}"
 
             if 'from' in operation:
-                masked_from = operation['from']
+                if 'Счет' in operation['from']:
+                    mask_from = operation['from'].replace(
+                        operation['from'][operation['from'].index(" ") + 1:-4], "**")
+                else:
+                    mask_from = operation['from']
+                    mask_from = mask_from.replace(mask_from[-16:][mask_from[-16:].rfind(
+                        " ") + 7:-4], "** **** ").replace(mask_from[-16:][:4], mask_from[-16:][:4] + ' ')
             else:
-                masked_from = "Внесение средств"
+                mask_from = "Внесение средств"
 
             if 'to' in operation:
-                masked_to = operation['to']
+                if 'Счет' in operation['to']:
+                    mask_to = operation['to'].replace(
+                        operation['to'][operation['to'].index(" ") + 1:-4], "**")
+                else:
+                    mask_to = operation['to']
+                    mask_to = mask_to.replace(mask_to[-16:][mask_to[-16:].rfind(
+                        " ") + 7:-4], "** **** ").replace(mask_to[-16:][:4], mask_to[-16:][:4] + ' ')
             else:
-                masked_to = None
+                mask_to = None
 
             print(
-                f"""{date} {description}\n{masked_from} -> {masked_to}\n{amount} {currency}\n""")
+                f"""{date} {description}\n{mask_from} -> {mask_to}\n{amount} {currency}\n""")
 
         except KeyError as error:
             print(f"Ошибка: отсутствует ключ {error}")
