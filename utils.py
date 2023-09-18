@@ -35,17 +35,27 @@ def get_data_transactions(operations):
     Args: operations (list): Список операций для печати информации о транзакциях
     """
     for operation in operations:
-        date = datetime.fromisoformat(operation['date'])
-        description = operation['description']
-        amount = f"{float(operation['operationAmount']['amount']):.2f} {operation['operationAmount']['currency']['name']}"
-        if 'from' in operation:
-            masked_from = operation['from']
-        else:
-            masked_from = "Внесение средств"
+        try:
+            date = datetime.fromisoformat(operation['date'])
+            description = operation['description']
+            # amount = f"{float(operation['operationAmount']['amount']):.2f} {operation['operationAmount']['currency']['name']}"
+            amount = "{:.2f} {}".format(
+                float(
+                    operation['operationAmount']['amount']),
+                operation['operationAmount']['currency']['name'])
 
-        if 'to' in operation:
-            masked_to = operation['to']
-        else:
-            masked_to = None
+            if 'from' in operation:
+                masked_from = operation['from']
+            else:
+                masked_from = "Внесение средств"
 
-        print(f"""{date} {description}\n{masked_from} -> {masked_to}\n{amount}\n""")
+            if 'to' in operation:
+                masked_to = operation['to']
+            else:
+                masked_to = None
+
+            print(
+                f"""{date} {description}\n{masked_from} -> {masked_to}\n{amount}\n""")
+
+        except KeyError as error:
+            print(f"Ошибка: отсутствует ключ {error}")
