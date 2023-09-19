@@ -29,6 +29,27 @@ def get_last_operations(operations):
     return data[0:5]
 
 
+def hide_bank_account(data):
+    """
+    Скрывает номер банковского счета, оставляя только последние четыре символа.
+    Args: data (str): Строка, содержащая номер банковского счета.
+    Returns: str: Строка со скрытым номером банковского счета, где остались только последние четыре символа,
+             остальные символы заменены на "**".
+    """
+    return data.replace(data[data.index(" ") + 1:-4], "**")
+
+
+def hide_card_number(data):
+    """
+    Скрывает номер кредитной карты, оставляя только последние четыре цифры и скрывая остальные.
+    Args: data (str): Строка, содержащая номер кредитной карты.
+    Returns: str: Строка со скрытым номером кредитной карты, где остались только последние четыре цифры,
+             остальные цифры заменены на "*".
+    """
+    return data.replace(data[-16:][data[-16:].rfind(" ") + 7:-4],
+                        "** **** ").replace(data[-16:][:4], data[-16:][:4] + ' ')
+
+
 def get_data_transactions(operations):
     """
     Выводит информацию о транзакциях из списка операций
@@ -43,23 +64,17 @@ def get_data_transactions(operations):
 
             if 'from' in operation:
                 if 'Счет' in operation['from']:
-                    mask_from = operation['from'].replace(
-                        operation['from'][operation['from'].index(" ") + 1:-4], "**")
+                    mask_from = hide_bank_account(operation['from'])
                 else:
-                    mask_from = operation['from']
-                    mask_from = mask_from.replace(mask_from[-16:][mask_from[-16:].rfind(
-                        " ") + 7:-4], "** **** ").replace(mask_from[-16:][:4], mask_from[-16:][:4] + ' ')
+                    mask_from = hide_card_number(operation['from'])
             else:
                 mask_from = "Внесение средств"
 
             if 'to' in operation:
                 if 'Счет' in operation['to']:
-                    mask_to = operation['to'].replace(
-                        operation['to'][operation['to'].index(" ") + 1:-4], "**")
+                    mask_to = hide_bank_account(operation['to'])
                 else:
-                    mask_to = operation['to']
-                    mask_to = mask_to.replace(mask_to[-16:][mask_to[-16:].rfind(
-                        " ") + 7:-4], "** **** ").replace(mask_to[-16:][:4], mask_to[-16:][:4] + ' ')
+                    mask_to = hide_card_number(operation['to'])
             else:
                 mask_to = None
 
