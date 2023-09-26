@@ -2,9 +2,9 @@
 
 import json
 import pytest
-from utils import (read_from_json, get_last_operations,
-                   hide_bank_account, hide_card_number,
-                   get_data_transactions)
+from src.utils import (read_from_json, get_last_operations,
+                       hide_bank_account, hide_card_number,
+                       get_data_transactions)
 
 # Примеры данных для тестирования
 test_json_data = {"operations": [{'id': 1,
