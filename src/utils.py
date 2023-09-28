@@ -57,7 +57,7 @@ def get_data_transactions(operations):
     """
     for operation in operations:
         try:
-            date = datetime.fromisoformat(operation['date'])
+            date = datetime.fromisoformat(operation['date']).strftime("%d.%m.%Y")
             description = operation['description']
             amount = f"{float(operation['operationAmount']['amount']):.2f}"
             currency = f"{operation['operationAmount']['currency']['name']}"

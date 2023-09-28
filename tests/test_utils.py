@@ -68,11 +68,11 @@ def test_get_data_transactions(capsys):
     captured = capsys.readouterr()
 
     assert captured.out == """\
-2023-09-15 12:00:00 Sample Transaction 1
+15.09.2023 Sample Transaction 1
 Card 1234 56** **** 3456 -> Счет **7654
 100.00 USD
 
-2023-09-14 14:30:00 Sample Transaction 2
+14.09.2023 Sample Transaction 2
 Счет **7654 -> Card 2345 67** **** 4567
 50.00 EUR
 
